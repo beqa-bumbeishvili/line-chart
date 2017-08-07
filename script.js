@@ -52,7 +52,3 @@ var svg = d3.select("body")
 var lineChart = svg.append("g")
 .classed("display",true)
 .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-
-
-
