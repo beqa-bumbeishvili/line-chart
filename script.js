@@ -1,4 +1,4 @@
-var data = [
+var dataset = [
     { key: "Jelly", value: 60, date: "2014/01/01" },
     { key: "Jelly", value: 58, date: "2014/01/02" },
     { key: "Jelly", value: 59, date: "2014/01/03" },
@@ -45,12 +45,49 @@ var height = svgHeight - margin.top - margin.bottom;
 
 var svg = d3.select("body")
     .append("svg")
-    .attr("id","chart")
+    .attr("id", "chart")
     .attr("width", svgWidth)
     .attr("height", svgHeight);
 
 var lineChart = svg.append("g")
-.classed("display",true)
-.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    .classed("display", true)
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 var dataParser = d3.timeParse("%Y/%m/%d");
+
+var x = d3.isoFormat().scale()
+    .domain(d3.extent(dataset, function (d) {
+        return dataParser(d.date);
+    }))
+    .range([0,width]);
+
+var y = d3.scale.linear()
+    .domain([0, d3.max(dataset, function (d) {
+        return d.value;
+    })]).range([height, 0]);
+
+function plot(parameters) {
+    //enter
+    this.selectAll(".point")
+        .data(parameters.data)
+        .enter()
+        .append("circle")
+        .classed("point", true)
+        .attr("r", 2);
+
+    this.selectAll(".point")
+    .attr("cx", function(d){
+        return dataParser(d.date);
+    })    
+    //update
+
+    this.selectAll(".point")
+    .data(params.data)
+    .exit()
+    .remove();
+    //exit
+}
+
+plot.call(chart, {
+    data: dataset
+});
