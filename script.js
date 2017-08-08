@@ -16,14 +16,14 @@ var monthlySales = [
     { "month": 12, "sales": 11 }
 ]
 
-var line = d3.svg.line()
+var line = d3.line()
     .x(function (d) { return d.month })
     .y(function (d) { return h - d.sales })
-    .interpolate("linear");
+    .curve(d3.curveLinear);
 
 var svg = d3.select("body")
     .append("svg")
     .attr({
         "width": w,
         "height": h
-    })                
+    });               
