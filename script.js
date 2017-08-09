@@ -22,3 +22,21 @@ var yAxis = d3.axisLeft().scale(yScale);
 
 var svg = d3.select('svg').append('g')
     .attr('transform', 'translate(40,20)');
+
+var line = d3.line()
+    .x(d => xScale(d.date))
+    .y(d => yScale(d.value));
+svg.selectAll('path')
+    .data([dataset]).enter().append('path')
+    .attr('d', line)
+    .attr('fill', 'none')
+    .attr('stroke', 'blue');
+
+svg.append('g')
+    .attr('class', 'xAxis')
+    .call(xAxis)
+    .attr('transform', 'translate(' + [0, height] + ')');
+
+svg.append('g')
+    .attr('class', 'yAxis')
+    .call(yAxis);
