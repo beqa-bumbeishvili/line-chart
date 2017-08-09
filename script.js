@@ -10,36 +10,15 @@ var dataset = [
     { date: new Date(2007, 4, 1), value: 69.47 },
 ];
 
-var line = d3.line()
-    .x(function (d) { return d.month })
-    .y(function (d) { return h - d.sales })
+var xExtent = d3.extent(dataset, d => d.date);
+var xScale = d3.scaleTime()
+    .domain(xExtent).range([0, width - margin.right]);
+var xAxis = d3.axisBottom().scale(xScale);
 
-var svg = d3.select("body")
-    .append("svg")
-    .attr({
-        "width": w,
-        "height": h
-    });
+var yMax = d3.max(dataset, d => d.value);
+var yScale = d3.scaleLinear()
+    .domain([0, yMax]).range([height, 0]);
+var yAxis = d3.axisLeft().scale(yScale);
 
-var path = d3.select("svg").append("path")
-    .attr({
-        d: line(monthlySales),
-        "fill": "none",
-        "stroke": "blue"
-    });
-
-var label = d3.select("svg").selectAll("text")
-    .data(monthlySales)
-    .enter()
-    .append("text")
-    .text(function (d) {
-        return d.sales;
-    })
-    .attr({
-        x: function (d) {
-            return d.month * 4;
-        },
-        y: function (d) {
-            return h - d.sales;
-        }
-    })
+var svg = d3.select('svg').append('g')
+    .attr('transform', 'translate(40,20)');
